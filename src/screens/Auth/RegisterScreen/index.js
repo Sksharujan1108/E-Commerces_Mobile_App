@@ -26,6 +26,35 @@ import {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
+
+    const handleSignUp = () => {
+        const User = {
+          name: name,
+          email: email,
+          password: password,
+        };
+    
+        // send A post reruest to the BackEnd API
+        axios
+          .post("http://localhost:8000/register", User)
+          .then((response) => {
+            console.log(response);
+            Alert.alert(
+              "Registration Successfull",
+              "You have registered successfully"
+            );
+            setName("");
+            setEmail("");
+            setPassword("");
+          })
+          .catch((err) => {
+            Alert.alert(
+              "Registration Error",
+              "An Error Occurred During registration"
+            );
+            console.log("Registration Failed", err);
+          });
+      };
   
     return (
       <SafeAreaView style={styles.container}>
@@ -35,7 +64,7 @@ import {
   
         <KeyboardAvoidingView>
           <View style={{ alignItems: "center" }}>
-            <Text style={styles.txt}> SignUp To Your Account </Text>
+            <Text style={styles.txt}> Register To Your Account </Text>
           </View>
   
           <View style={{ marginTop: 90 }}>
@@ -88,9 +117,9 @@ import {
           </View>
   
           <View style={{ marginTop: 100 }}>
-            <Pressable onPress={() => onPress()} 
+            <Pressable onPress={handleSignUp} 
               style={styles.Btn_Container}>
-              <Text style={styles.Btn_txt}> SignUp &nbsp; &nbsp; 🤓 </Text>
+              <Text style={styles.Btn_txt}> Register &nbsp; &nbsp; 🤓 </Text>
             </Pressable>
   
             <View
