@@ -30,12 +30,12 @@ const userSchema = new mongoose.Schema({
        country: String,
        postalCode: String,
    },
-   orders: [
-       {
-           type:mongoose.Schema.Type.ObjectId,
-           ref: 'Order'
-       },
-   ],
+//    orders: [
+//        {
+//            type:mongoose.Schema.Type.ObjectId,
+//            ref: 'Order'
+//        },
+//    ],
    createdAt: {
        type: Date,
        default: Date.now,

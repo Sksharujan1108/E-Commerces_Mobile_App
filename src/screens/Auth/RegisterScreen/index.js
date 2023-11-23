@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     View,
   } from "react-native";
-  import React, { useState } from "react";
+  import React, { useEffect, useState } from "react";
   import { ColorSheet } from "../../../Utilis/ColorSheet";
   import { Images } from "../../../Utilis/Image";
   import { MaterialIcons } from "@expo/vector-icons";
@@ -19,42 +19,65 @@ import {
   import { Ionicons } from "@expo/vector-icons";
   import { styles } from "./styles";
   import { useNavigation } from "@react-navigation/native";
+  import axios from "axios";
+import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
+import { registerDataDetails, registerDataStatus } from "../../../feature/Slices/RegisterSlices";
  
   
   const RegisterScreen = () => {
+    const dispatch = useAppDispatch()
+
+    const UserRegister = useAppSelector(registerDataDetails)
+    const UserRegisterStatus = useAppSelector(registerDataStatus)
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
 
     const handleSignUp = () => {
-        const User = {
-          name: name,
-          email: email,
-          password: password,
-        };
+      dispatch(postRegister({ name, email, password }));
+    };
+  
+    // Assuming you have a success message in your state
+    if (UserRegisterStatus === "success") {
+      Alert.alert(
+        "Registration Successfull",
+        "You have registered successfully"
+      );
+      // You can navigate to the LoginScreen here
+      navigation.navigate("Login");
+    }
+
+    // const handleSignUp = () => {
+    //     const User = {
+    //       name: name,
+    //       email: email,
+    //       password: password,
+    //     };
+    //     console.log("*********************", User)
     
-        // send A post reruest to the BackEnd API
-        axios
-          .post("http://localhost:8000/register", User)
-          .then((response) => {
-            console.log(response);
-            Alert.alert(
-              "Registration Successfull",
-              "You have registered successfully"
-            );
-            setName("");
-            setEmail("");
-            setPassword("");
-          })
-          .catch((err) => {
-            Alert.alert(
-              "Registration Error",
-              "An Error Occurred During registration"
-            );
-            console.log("Registration Failed", err);
-          });
-      };
+    //     // send A post reruest to the BackEnd API
+    //     axios
+    //       .post("http://localhost:8000/register", User)
+    //       .then((response) => {
+    //         console.log(response);
+    //         Alert.alert(
+    //           "Registration Successfull",
+    //           "You have registered successfully"
+    //         );
+    //         setName("");
+    //         setEmail("");
+    //         setPassword("");
+    //       })
+    //       .catch((err) => {
+    //         Alert.alert(
+    //           "Registration Error",
+    //           "An Error Occurred During registration"
+    //         );
+    //         console.log("Registration Failed", err);
+    //       });
+    //   };
   
     return (
       <SafeAreaView style={styles.container}>

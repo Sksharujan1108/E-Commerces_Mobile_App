@@ -6,6 +6,8 @@ const nodemailer = require('nodemailer');
 
 const app = express();
 const port = 8000;
+
+
 const cors = require("cors");
 app.use(cors());
 
@@ -37,8 +39,8 @@ app.listen(port, () => {
 
 
 // Corrected file path assuming it's a JavaScript file
-const Users = require('../models/User_models');
-const Orders = require('../models/Order_models');
+const Users = require('./Models/User');
+const Orders = require('./Models/Order');
 
 
 // Function To sendVerification To User

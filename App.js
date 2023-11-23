@@ -1,13 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import AuthStack from './src/navigation/stack/AuthStack'
+import { Provider } from 'react-redux';
 
 
 export default function App() {
   return (
-    <>
-      <AuthStack/>
-    </>
+    <Provider store = {store}>
+      <AuthStack />
+    </Provider>
   );
 }
 
