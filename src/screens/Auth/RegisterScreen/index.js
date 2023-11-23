@@ -36,17 +36,22 @@ import { registerDataDetails, registerDataStatus } from "../../../feature/Slices
     const navigation = useNavigation();
 
     const handleSignUp = () => {
-      dispatch(postRegister({ name, email, password }));
+      const userData = {
+        name: name,
+        email: email,
+        password: password,
+      };
+  
+      dispatch(postRegister(userData));
     };
   
-    // Assuming you have a success message in your state
-    if (UserRegisterStatus === "success") {
-      Alert.alert(
-        "Registration Successfull",
-        "You have registered successfully"
-      );
-      // You can navigate to the LoginScreen here
-      navigation.navigate("Login");
+    if (UserRegisterStatus === 'Success') {
+      Alert.alert('Registration Successful', 'You have registered successfully');
+      setName('');
+      setEmail('');
+      setPassword('');
+      // Navigate to Login screen
+      navigation.navigate('Login');
     }
 
     // const handleSignUp = () => {

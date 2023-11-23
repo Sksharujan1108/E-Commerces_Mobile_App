@@ -26,7 +26,7 @@ export const postRegister = createAsyncThunk ("@/api/register", async () => {
 })
 
 export const registerUserData = createSlice ({
-    name: 'UserData',    //reducer name
+    name: 'registerUserData',    //reducer name
     initialState,
     reducers: {},
                      // bulider object 
@@ -48,4 +48,4 @@ export const registerUserData = createSlice ({
 export const registerDataDetails = (state) => state.UserData.UserDetail;
 export const registerDataStatus = (state) => state.UserData.status;
 
-export default register;
+export default registerUserData.reducer; // Ensure you export the reducer correctly
