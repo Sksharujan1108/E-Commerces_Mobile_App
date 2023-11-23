@@ -20,69 +20,82 @@ import {
   import { styles } from "./styles";
   import { useNavigation } from "@react-navigation/native";
   import axios from "axios";
-import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
-import { registerDataDetails, registerDataStatus } from "../../../feature/Slices/RegisterSlices";
+  import { useSelector, useDispatch } from 'react-redux'
+import { postRegister, registerDataDetails, registerDataStatus } from "../../../feature/Slices/RegisterSlices";
  
   
   const RegisterScreen = () => {
-    const dispatch = useAppDispatch()
+    const dispatch = useDispatch()
 
-    const UserRegister = useAppSelector(registerDataDetails)
-    const UserRegisterStatus = useAppSelector(registerDataStatus)
+    const UserRegister = useSelector(registerDataDetails)
+    const UserRegisterStatus = useSelector(registerDataStatus)
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
 
-    const handleSignUp = () => {
-      const userData = {
-        name: name,
-        email: email,
-        password: password,
-      };
-  
-      dispatch(postRegister(userData));
-    };
-  
-    if (UserRegisterStatus === 'Success') {
-      Alert.alert('Registration Successful', 'You have registered successfully');
-      setName('');
-      setEmail('');
-      setPassword('');
-      // Navigate to Login screen
-      navigation.navigate('Login');
-    }
-
     // const handleSignUp = () => {
-    //     const User = {
-    //       name: name,
-    //       email: email,
-    //       password: password,
-    //     };
-    //     console.log("*********************", User)
-    
-    //     // send A post reruest to the BackEnd API
-    //     axios
-    //       .post("http://localhost:8000/register", User)
-    //       .then((response) => {
-    //         console.log(response);
-    //         Alert.alert(
-    //           "Registration Successfull",
-    //           "You have registered successfully"
-    //         );
-    //         setName("");
-    //         setEmail("");
-    //         setPassword("");
-    //       })
-    //       .catch((err) => {
-    //         Alert.alert(
-    //           "Registration Error",
-    //           "An Error Occurred During registration"
-    //         );
-    //         console.log("Registration Failed", err);
-    //       });
+    //   const userData = {
+    //     name: name,
+    //     email: email,
+    //     password: password,
     //   };
+  
+    //   dispatch(postRegister(userData));
+    // };
+  
+    // useEffect(() => {
+    //   if (UserRegisterStatus === 'failed') {
+    //     Alert.alert('Registration Failed', UserRegisterError || 'Registration failed. Please try again.');
+    //   } else if (UserRegisterStatus === 'succeeded') {
+    //     Alert.alert(
+    //       'Registration Successful',
+    //       'You have registered successfully',
+    //       [
+    //         {
+    //           text: 'OK',
+    //           onPress: () => {
+    //             setName('');
+    //             setEmail('');
+    //             setPassword('');
+    //             navigation.navigate('Login');
+    //           },
+    //         },
+    //       ]
+    //     );
+    //   }
+    // }, [UserRegisterStatus, navigation]);
+
+    const handleSignUp = () => {
+        const User = {
+          name: name,
+          email: email,
+          password: password,
+        };
+        console.log("*********************", User)
+    
+        // send A post reruest to the BackEnd API
+        axios
+          .post("http://localhost:8000/register", User)
+          .then((response) => {
+            console.log(response);
+            Alert.alert(
+              "Registration Successfull",
+              "You have registered successfully"
+            );
+            setName("");
+            setEmail("");
+            setPassword("");
+          })
+          .catch((err) => {
+            Alert.alert(
+              "Registration Error",
+              "An Error Occurred During registration"
+            );
+            console.log("Registration Failed", err);
+          });
+      };
   
     return (
       <SafeAreaView style={styles.container}>

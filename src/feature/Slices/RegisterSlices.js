@@ -10,42 +10,39 @@ const initialState = {
 
 const BASE_URL = ("http://localhost:8000/register")
 
-export const postRegister = createAsyncThunk ("@/api/register", async () => {
+export const postRegister = createAsyncThunk ("@/api/register", async (_, thunkAPI) => {
     try {
-        const response = await axios.get(BASE_URL);
+        const response = await axios.post(BASE_URL);
         console.log('====================================', response);
         return response.data;
       } catch (err) {
         const error = err;
-        if (!error) {
-          throw err;
-        }
         // We got validation errors, let's return those so we can reference in our component and set form errors
-        return error;
+        return thunkAPI.rejectWithValue(err.response.data);
       }
 })
 
 export const registerUserData = createSlice ({
-    name: 'registerUserData',    //reducer name
+    name: 'userData',    //reducer name
     initialState,
     reducers: {},
                      // bulider object 
     extraReducers : (bulider) => {
-        bulider.addCase(getDetail.pending, (state) => {
+        bulider.addCase(postRegister.pending, (state) => {
             state.status = "Loading";
         })
-        bulider.addCase(getDetail.fulfilled, (state, action) => {
+        bulider.addCase(postRegister.fulfilled, (state, action) => {
             state.status = "Success";
             state.UserDetail = action.payload;
         })
-        bulider.addCase(getDetail.rejected, (state, action) => {
+        bulider.addCase(postRegister.rejected, (state, action) => {
             state.status = "Falied";
-            state.Error = action.error.message
+            state.Error =  action.payload ? action.payload.message : action.error.message;
         })
     } 
 })
 
-export const registerDataDetails = (state) => state.UserData.UserDetail;
-export const registerDataStatus = (state) => state.UserData.status;
+export const registerDataDetails = (state) => state.userData.UserDetail;
+export const registerDataStatus = (state) => state.userData.status;
 
 export default registerUserData.reducer; // Ensure you export the reducer correctly

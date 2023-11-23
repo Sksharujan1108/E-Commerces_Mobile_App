@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
    },
    verificationToken: String,
 
-   addresses: {
+   addresses: [
+    {
        name: String,
        mobile: String,
        houseNo: String,
@@ -30,12 +31,13 @@ const userSchema = new mongoose.Schema({
        country: String,
        postalCode: String,
    },
-//    orders: [
-//        {
-//            type:mongoose.Schema.Type.ObjectId,
-//            ref: 'Order'
-//        },
-//    ],
+],
+   orders: [
+       {
+           type:mongoose.Schema.Types.ObjectId,
+           ref: 'Order'
+       },
+   ],
    createdAt: {
        type: Date,
        default: Date.now,

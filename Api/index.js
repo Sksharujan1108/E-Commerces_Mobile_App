@@ -6,8 +6,6 @@ const nodemailer = require('nodemailer');
 
 const app = express();
 const port = 8000;
-
-
 const cors = require("cors");
 app.use(cors());
 
@@ -45,8 +43,6 @@ const Orders = require('./Models/Order');
 
 // Function To sendVerification To User
 const sendVerification = async (email,verificationToken) => {
-
-
     // Create nodemailer TransPort
     const transporter = nodemailer.createTransport({
       // Configure the Email Service
@@ -62,17 +58,20 @@ const sendVerification = async (email,verificationToken) => {
       from: 'amazon.com',
       to: email,
       subject: 'Verify Your Email',
-      text: `Please Verify Your Email By Clicking On The Link Below: http://localhost:8000/verify/${verificationToken}`,
+      text: `Please click the following link to verify your email: http://localhost:8000/verify/${verificationToken}`,
     } ;
   
     // send The Email
     try {
       await transporter.sendMail(mailoptions)
+      console.log("Verification email sent successfully");
     } catch (err) {
       console.log('Error Sending Verification Email', err)
     }
     
   }
+  // Register a new user
+// ... existing imports and setup ...
   
   // Endpoint To Register In The App
   app.post('/register', async (request, response) => {
@@ -93,6 +92,9 @@ const sendVerification = async (email,verificationToken) => {
   
       // Save The User To The Database
       await newUser.save();
+
+      // Debugging statement to verify data
+      console.log("New User Registered:", newUser);
   
       // Send Verification Email To the User
       sendVerification(newUser.email, newUser.verificationToken)
@@ -111,7 +113,7 @@ const sendVerification = async (email,verificationToken) => {
       const token = req.params.token;
   
       // Find The User With The Given Verification Token
-      const user = await user.findOne({verificationToken: token})
+      const user = await Users.findOne({verificationToken: token})
       if (!user) {
         return res.status(400).json({ message: 'Invalid Token' });
       }
@@ -127,3 +129,11 @@ const sendVerification = async (email,verificationToken) => {
       res.status(500).json({ message: 'Email Verification Failed'})
     }
   })
+
+  // const generateSecretKey = () => {
+  //   const secretKey = crypto.randomBytes(32).toString("hex");
+  
+  //   return secretKey;
+  // };
+  
+  // const secretKey = generateSecretKey();
