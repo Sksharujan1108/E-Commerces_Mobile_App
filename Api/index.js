@@ -9,11 +9,11 @@ const port = 8000;
 const cors = require("cors");
 
 const corsOptions = {
-  origin: 'http://192.168.1.20:8000', // Replace with the actual URL of your frontend
+  origin: 'http://127.0.0.1:8000/register', // Replace with the actual URL of your frontend
   optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 // const cors = require("cors");
 // app.use(cors());
 
