@@ -10,7 +10,7 @@ const initialState = {
 
 const BASE_URL = ("http://localhost:8000/register")
 
-export const postRegister = createAsyncThunk ("@/api/register", async (_, thunkAPI) => {
+export const postRegister = createAsyncThunk ("@/api/register", async (_, { rejectWithValue }) => {
     try {
         const response = await axios.post(BASE_URL);
         console.log('====================================', response);
@@ -18,7 +18,7 @@ export const postRegister = createAsyncThunk ("@/api/register", async (_, thunkA
       } catch (err) {
         const error = err;
         // We got validation errors, let's return those so we can reference in our component and set form errors
-        return thunkAPI.rejectWithValue(err.response.data);
+        return rejectWithValue(err.response.data);
       }
 })
 
@@ -34,6 +34,9 @@ export const registerUserData = createSlice ({
         bulider.addCase(postRegister.fulfilled, (state, action) => {
             state.status = "Success";
             state.UserDetail = action.payload;
+            console.log('====================================');
+            console.log(status);
+            console.log('====================================');
         })
         bulider.addCase(postRegister.rejected, (state, action) => {
             state.status = "Falied";

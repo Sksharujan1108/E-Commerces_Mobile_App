@@ -7,12 +7,24 @@ const nodemailer = require('nodemailer');
 const app = express();
 const port = 8000;
 const cors = require("cors");
-app.use(cors());
+
+const corsOptions = {
+  origin: 'http://192.168.1.20:8000', // Replace with the actual URL of your frontend
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+// const cors = require("cors");
+// app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const jwt = require("jsonwebtoken");
+
+// app.listen(port, () => {
+//   console.log("Server is running on port 8000");
+// });
 
 // Connect to MongoDB database
 const URI = 'mongodb+srv://sksharujan27:SKsharu2708@cluster0.nbvtgdr.mongodb.net';
@@ -58,7 +70,7 @@ const sendVerification = async (email,verificationToken) => {
       from: 'amazon.com',
       to: email,
       subject: 'Verify Your Email',
-      text: `Please click the following link to verify your email: http://localhost:8000/verify/${verificationToken}`,
+      text: `Please click the following link to verify your email: http://192.168.1.20:8000/verify/${verificationToken}`,
     } ;
   
     // send The Email
@@ -130,6 +142,11 @@ const sendVerification = async (email,verificationToken) => {
     }
   })
 
+  // app.listen(port, () => {
+  //   console.log(`Server Is Running On Port ${port}`);
+  // });
+
+  
   // const generateSecretKey = () => {
   //   const secretKey = crypto.randomBytes(32).toString("hex");
   

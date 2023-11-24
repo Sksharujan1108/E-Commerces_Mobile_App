@@ -22,6 +22,7 @@ import {
   import axios from "axios";
   import { useSelector, useDispatch } from 'react-redux'
 import { postRegister, registerDataDetails, registerDataStatus } from "../../../feature/Slices/RegisterSlices";
+
  
   
   const RegisterScreen = () => {
@@ -35,67 +36,34 @@ import { postRegister, registerDataDetails, registerDataStatus } from "../../../
     const [password, setPassword] = useState('');
     const navigation = useNavigation();
 
-    // const handleSignUp = () => {
-    //   const userData = {
-    //     name: name,
-    //     email: email,
-    //     password: password,
-    //   };
-  
-    //   dispatch(postRegister(userData));
-    // };
-  
-    // useEffect(() => {
-    //   if (UserRegisterStatus === 'failed') {
-    //     Alert.alert('Registration Failed', UserRegisterError || 'Registration failed. Please try again.');
-    //   } else if (UserRegisterStatus === 'succeeded') {
-    //     Alert.alert(
-    //       'Registration Successful',
-    //       'You have registered successfully',
-    //       [
-    //         {
-    //           text: 'OK',
-    //           onPress: () => {
-    //             setName('');
-    //             setEmail('');
-    //             setPassword('');
-    //             navigation.navigate('Login');
-    //           },
-    //         },
-    //       ]
-    //     );
-    //   }
-    // }, [UserRegisterStatus, navigation]);
-
-    const handleSignUp = () => {
-        const User = {
-          name: name,
-          email: email,
-          password: password,
-        };
-        console.log("*********************", User)
-    
-        // send A post reruest to the BackEnd API
-        axios
-          .post("http://localhost:8000/register", User)
-          .then((response) => {
-            console.log(response);
-            Alert.alert(
-              "Registration Successfull",
-              "You have registered successfully"
-            );
-            setName("");
-            setEmail("");
-            setPassword("");
-          })
-          .catch((err) => {
-            Alert.alert(
-              "Registration Error",
-              "An Error Occurred During registration"
-            );
-            console.log("Registration Failed", err);
-          });
+    const handleRegister = () => {
+      const user = {
+        name: name,
+        email: email,
+        password: password,
       };
+  
+      // send a POST  request to the backend API to register the user
+      axios
+        .post("http://192.168.1.20:8000/register", user)
+        .then((response) => {
+          console.log(response);
+          Alert.alert(
+            "Registration successful",
+            "You have been registered Successfully"
+          );
+          setName("");
+          setEmail("");
+          setPassword("");
+        })
+        .catch((error) => {
+          Alert.alert(
+            "Registration Error",
+            "An error occurred while registering"
+          );
+          console.log("registration failed", error);
+        });
+    };
   
     return (
       <SafeAreaView style={styles.container}>
@@ -158,7 +126,7 @@ import { postRegister, registerDataDetails, registerDataStatus } from "../../../
           </View>
   
           <View style={{ marginTop: 100 }}>
-            <Pressable onPress={handleSignUp} 
+            <Pressable onPress={handleRegister} 
               style={styles.Btn_Container}>
               <Text style={styles.Btn_txt}> Register &nbsp; &nbsp; 🤓 </Text>
             </Pressable>
