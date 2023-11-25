@@ -61,7 +61,7 @@ const sendVerification = async (email,verificationToken) => {
       service: 'Gmail',
       auth: {
         user: "sksharujan27@gmail.com",
-        pass: "sksharu2708",
+        pass: "Sk_sharu%2708",
       }
     })
   
@@ -89,6 +89,10 @@ const sendVerification = async (email,verificationToken) => {
   app.post('/register', async (request, response) => {
     try {
       const { name, email, password } = request.body;
+
+      if(!name || !email || !password) {
+        return response.status(400).json({message: "Please Input All Details"})
+      }
   
       // Check if the email is Already Registered
       const existingUser = await Users.findOne({ email });
@@ -98,10 +102,8 @@ const sendVerification = async (email,verificationToken) => {
   
       // create A New User
       const newUser = new Users({ name, email, password });
-  
       // Generate and store the Verification Token
       newUser.verificationToken = crypto.randomBytes(20).toString('hex');
-  
       // Save The User To The Database
       await newUser.save();
 
