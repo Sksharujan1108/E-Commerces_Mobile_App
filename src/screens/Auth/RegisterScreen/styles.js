@@ -67,6 +67,21 @@ export const styles = StyleSheet.create({
         fontSize: 17,
         textDecorationLine: "underline",
         fontWeight: '500',
-    }
+    },
+    messageContainer: { 
+      alignContent: "center", 
+      justifyContent: "center",
+      backgroundColor: "pink"
+    },
+    messageText: {
+      textAlign: 'center',
+      fontSize: 16,
+    },
+    successMessage: {
+      color: 'green',
+    },
+    errorMessage: {
+      color: 'red',
+    },
    
   });

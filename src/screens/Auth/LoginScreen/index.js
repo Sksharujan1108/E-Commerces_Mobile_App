@@ -1,4 +1,5 @@
 import {
+  Alert,
     Dimensions,
     Image,
     KeyboardAvoidingView,
@@ -10,18 +11,55 @@ import {
     TouchableOpacity,
     View,
   } from "react-native";
-  import React, { useState } from "react";
+  import React, { useEffect, useState } from "react";
   import { ColorSheet } from "../../../Utilis/ColorSheet";
   import { Images } from "../../../Utilis/Image";
   import { MaterialIcons } from "@expo/vector-icons";
   import { AntDesign } from "@expo/vector-icons";
   import { useNavigation } from "@react-navigation/native";
 import { styles } from "./styles";
+import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
   
   const LoginScreen = () => {
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const navigation = useNavigation()
+
+    useEffect(() => {
+      const checkLoginStatus = async () => {
+        try {
+          const token = await AsyncStorage.getItem('AuthToken')
+
+          if(token) {
+            navigation.navigate("Main")
+          }
+        } catch(err) {
+          console.log("Error", err)
+        }
+      };
+      checkLoginStatus();
+    }, [])
+
+    const handleLogin = () => {
+      const user = {
+        email: email,
+        password: password,
+      }
+
+      axios
+      .post ('http://192.168.87.198:8000/login', user)
+      .then((response) => {
+        console.log(response);
+        const token = response.data.token
+        AsyncStorage.setItem('AuthToken', token);
+        navigation.replace('Main')
+      })
+      .catch((err) => {
+        Alert.alert("Login Error", "Invaild LogIn")
+        console.log(err)
+      }) 
+    }
   
   
     return (
@@ -41,7 +79,7 @@ import { styles } from "./styles";
   
               <TextInput
                 value={email}
-                onChange={(value) => setEmail(value)}
+                onChangeText={(value) => setEmail(value)}
                 style={styles.txtInput}
                 placeholder="Enter Your Email"
               />
@@ -54,7 +92,7 @@ import { styles } from "./styles";
   
               <TextInput
                 value={password}
-                onChange={(text) => setPassword(text)}
+                onChangeText={(text) => setPassword(text)}
                 style={styles.txtInput}
                 placeholder="Enter Your Password"
               />
@@ -70,7 +108,9 @@ import { styles } from "./styles";
           </View>
   
           <View style={{ marginTop: 100 }}>
-            <Pressable style={styles.Btn_Container}>
+            <Pressable 
+             onPress={handleLogin}
+             style={styles.Btn_Container}>
               <Text style={styles.Btn_txt}> LogIn &nbsp; &nbsp; 🤓 </Text>
             </Pressable>
   
