@@ -38,7 +38,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
         console.log(response);
         const token = response.data.token
         AsyncStorage.setItem('AuthToken', token);
-        navigation.replace('Home')
+        navigation.replace('Main')
       })
       .catch((err) => {
         Alert.alert("Login Error", "Invaild LogIn")
