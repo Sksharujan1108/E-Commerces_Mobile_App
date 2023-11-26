@@ -9,11 +9,12 @@ const port = 8000;
 const cors = require("cors");
 
 const corsOptions = {
-  origin: 'http://127.0.0.1:8000/register', // Replace with the actual URL of your frontend
+  origin: 'http://10.0.2.2:8000/register', // Replace with the actual URL of your frontend
   optionsSuccessStatus: 200,
 };
 
 app.use(cors());
+
 // const cors = require("cors");
 // app.use(cors());
 
@@ -21,7 +22,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const jwt = require("jsonwebtoken");
-
 // app.listen(port, () => {
 //   console.log("Server is running on port 8000");
 // });
@@ -60,8 +60,8 @@ const sendVerification = async (email,verificationToken) => {
       // Configure the Email Service
       service: 'Gmail',
       auth: {
-        user: "sksharujan27@gmail.com",
-        pass: "Sk_sharu%2708",
+        user: "sharujanvirat1219@gmail.com",
+        pass: "ddtv lhox ifom xfln",
       }
     })
   
@@ -70,7 +70,7 @@ const sendVerification = async (email,verificationToken) => {
       from: 'amazon.com',
       to: email,
       subject: 'Verify Your Email',
-      text: `Please click the following link to verify your email: http://192.168.1.20:8000/verify/${verificationToken}`,
+      text: `Please click the following link to verify your email: http://192.168.87.198:8000/verify/${verificationToken}`,
     } ;
   
     // send The Email
@@ -138,21 +138,44 @@ const sendVerification = async (email,verificationToken) => {
   
       await user.save();
       
-      res.status(200).json({ message: 'Email Verified Successfully'})
+      response.status(200).json({ message: 'Email Verified Successfully'})
     } catch (err) {
-      res.status(500).json({ message: 'Email Verification Failed'})
+      response.status(500).json({ message: 'Email Verification Failed'})
     }
   })
 
-  // app.listen(port, () => {
-  //   console.log(`Server Is Running On Port ${port}`);
-  // });
+  
+  const generateSecretKey = () => {
+    const secretKey = crypto.randomBytes(32).toString("hex");
+  
+    return secretKey;
+  };
+  
+  const secretKey = generateSecretKey();
 
-  
-  // const generateSecretKey = () => {
-  //   const secretKey = crypto.randomBytes(32).toString("hex");
-  
-  //   return secretKey;
-  // };
-  
-  // const secretKey = generateSecretKey();
+
+  // EndPoint To Login The USer
+  app.post('/login', async (request, response) => {
+    try {
+      const { email, password } = request.body
+
+      // Check USer Exit
+      const user = await Users.findOne({ email })
+      if(!user) {
+        return response.status(401).json({message: 'Invaild Email OR Password'})
+      }
+
+      // check if the password is correct
+      if(user.password !== password) {
+        return response.status(401).json({message: 'Invaild Password'})
+      }
+
+      // Generate Token
+      const token = jwt.sign({userID: user._id}, secretKey)
+
+      response.status(200).json({token})
+
+    } catch(err) {
+      response.status(500).json({message: 'Login Failed'})
+    }
+  })
