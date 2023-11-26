@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     View,
   } from "react-native";
-  import React, { useState } from "react";
+  import React, { useEffect, useState } from "react";
   import { ColorSheet } from "../../../Utilis/ColorSheet";
   import { Images } from "../../../Utilis/Image";
   import { MaterialIcons } from "@expo/vector-icons";
@@ -25,6 +25,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation()
+
+    useEffect(() => {
+      const checkLoginStatus = async () => {
+        try {
+          const token = await AsyncStorage.getItem('AuthToken')
+
+          if(token) {
+            navigation.navigate("Main")
+          }
+        } catch(err) {
+          console.log("Error", err)
+        }
+      };
+      checkLoginStatus();
+    }, [])
 
     const handleLogin = () => {
       const user = {
