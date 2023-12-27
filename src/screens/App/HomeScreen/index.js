@@ -15,9 +15,12 @@ import { Feather, Ionicons, MaterialIcons, AntDesign } from "@expo/vector-icons"
 import axios from "axios";
 import { ColorSheet } from "../../../Utilis/ColorSheet";
 import { Homedeals, HomelistDatq, SlideShowimages, offers } from "../../../Utilis/Image";
+import { useNavigation } from "@react-navigation/native";
 import ProductItem from "../../../component/ProductItem";
 
 const HomeScreen = () => {
+  const navigation = useNavigation()
+
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState("jewelery");
@@ -152,13 +155,22 @@ const HomeScreen = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {offers.map((item, index) => (
             <Pressable
+              key={index}
+              onPress={() => navigation.navigate("Info", {
+                id: item.id,
+                title: item.title,
+                price: item?.price,
+                carouselImages: item?.carouselImages,
+                color: item?.color,
+                size: item?.size,
+                oldPrice: item?.oldPrice,
+                item: item,
+              })}
               style={{
                 marginVertical: 10,
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              key={index}
-              onPress={() => handlePress(item)}
             >
               <Image
                 style={{
