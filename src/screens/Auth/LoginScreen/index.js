@@ -48,7 +48,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
       }
 
       axios
-      .post ('http://192.168.1.20:8000/login', user)
+      .post ('http://10.0.2.2:8000/login', user)
       .then((response) => {
         console.log(response);
         const token = response.data.token

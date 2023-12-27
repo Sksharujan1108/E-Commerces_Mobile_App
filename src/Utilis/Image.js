@@ -116,7 +116,7 @@ export const offers = [
       id: "0",
       title:
         "Oppo Enco Air3 Pro True Wireless in Ear Earbuds with Industry First Composite Bamboo Fiber, 49dB ANC, 30H Playtime, 47ms Ultra Low Latency,Fast Charge,BT 5.3 (Green)",
-      offer: "72% off",
+      offer: "72%",
       oldPrice: 7500,
       price: 4500,
       image:

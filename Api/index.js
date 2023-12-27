@@ -9,7 +9,7 @@ const port = 8000;
 const cors = require("cors");
 
 const corsOptions = {
-  origin: 'http://192.168.1.20:8000/register', // Replace with the actual URL of your frontend
+  origin: 'http://10.0.2.2:8000/register', // Replace with the actual URL of your frontend
   optionsSuccessStatus: 200,
 };
 
@@ -70,7 +70,7 @@ const sendVerification = async (email,verificationToken) => {
       from: 'amazon.com',
       to: email,
       subject: 'Verify Your Email',
-      text: `Please click the following link to verify your email: http://192.168.1.20:8000/verify/${verificationToken}`,
+      text: `Please click the following link to verify your email: http://10.0.2.2:8000/verify/${verificationToken}`,
     } ;
   
     // send The Email

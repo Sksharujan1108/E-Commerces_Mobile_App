@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Image,
   Pressable,
@@ -8,17 +9,44 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React from "react";
-import { Feather } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import DropDownPicker from "react-native-dropdown-picker";
 import { SliderBox } from "react-native-image-slider-box";
+import { Feather, Ionicons, MaterialIcons, AntDesign } from "@expo/vector-icons";
+import axios from "axios";
 import { ColorSheet } from "../../../Utilis/ColorSheet";
-import { Homedeals, HomelistDatq, SlideShowimages } from "../../../Utilis/Image";
+import { Homedeals, HomelistDatq, SlideShowimages, offers } from "../../../Utilis/Image";
+import ProductItem from "../../../component/ProductItem";
 
 const HomeScreen = () => {
+  const [products, setProducts] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [category, setCategory] = useState("jewelery");
+  const [items, setItems] = useState([
+    { label: "Men's clothing", value: "men's clothing" },
+    { label: "jewelery", value: "jewelery" },
+    { label: "electronics", value: "electronics" },
+    { label: "women's clothing", value: "women's clothing" },
+  ]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://fakestoreapi.com/products"
+        );
+        setProducts(response.data);
+      } catch (err) {
+        console.log("Error Message", err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const onGenderOpen = useCallback(() => {
+    setCompanyOpen(false);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -79,20 +107,141 @@ const HomeScreen = () => {
           Trending Deals of the week
         </Text>
 
-        <View style = {styles.homeDealsContainer}>
+        <View style={styles.homeDealsContainer}>
           {Homedeals.map((item, index) => (
-            <Pressable key = {index}
-              style = {{ marginVertical: 10, flexDirection: 'row', alignItems: 'center'}}
+            <Pressable
+              key={index}
+              style={{
+                marginVertical: 10,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
             >
-              <Image style = {{width: 180, height: 180, resizeMode: "contain"}} 
-                 source = {{ uri : item?.image }} />
+              <Image
+                style={{
+                  width: 180,
+                  height: 180,
+                  resizeMode: "contain",
+                }}
+                source={{ uri: item?.image }}
+              />
             </Pressable>
           ))}
         </View>
 
-        <Text style = {{ height: 1, borderColor: '#D0D0D0', borderWidth:2, marginTop: 15 }} />
+        {/* Border Space */}
+        <Text
+          style={{
+            height: 1,
+            borderColor: "#D0D0D0",
+            borderWidth: 2,
+            marginTop: 15,
+          }}
+        />
 
-        <Text style = {{ padding: 10, fontSize: 18, fontWeight:'bold' }}> Today's Deals </Text>
+        <Text
+          style={{
+            padding: 10,
+            fontSize: 18,
+            fontWeight: "bold",
+          }}
+        >
+          Today's Deals
+        </Text>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {offers.map((item, index) => (
+            <Pressable
+              style={{
+                marginVertical: 10,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              key={index}
+              onPress={() => handlePress(item)}
+            >
+              <Image
+                style={{
+                  width: 150,
+                  height: 150,
+                  resizeMode: "contain",
+                }}
+                source={{ uri: item?.image }}
+              />
+
+              <View
+                style={{
+                  backgroundColor: "#E31837",
+                  paddingVertical: 5,
+                  width: 130,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 10,
+                  borderRadius: 4,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    color: ColorSheet.White,
+                    fontSize: 13,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Upto {item?.offer} Off
+                </Text>
+              </View>
+            </Pressable>
+          ))}
+        </ScrollView>
+
+        {/* Border Space */}
+        <Text
+          style={{
+            height: 1,
+            borderColor: "#D0D0D0",
+            borderWidth: 2,
+            marginTop: 15,
+          }}
+        />
+
+        <View
+          style={{
+            marginHorizontal: 10,
+            marginTop: 20,
+            width: "45%",
+            marginBottom: open ? 50 : 15,
+          }}
+        >
+          <DropDownPicker
+            style={{
+              borderColor: "#B7B7B7",
+              height: 30,
+              marginBottom: open ? 120 : 15,
+            }}
+            open={open}
+            value={category}
+            items={items}
+            setOpen={setOpen}
+            setValue={setCategory}
+            setItems={setItems}
+            placeholder="choose category"
+            placeholderStyle={styles.placeholderStyles}
+            onOpen={onGenderOpen}
+            zIndex={3000}
+            zIndexInverse={1000}
+          />
+        </View>
+
+        <View style = {{ flexDirection: "row", alignItems: "center", flexWrap: "wrap" }}>
+
+          {products
+            ?.filter((item) => item.category === category)
+            .map((item, index) => (
+              <ProductItem item={item} key={index} />
+          ))}
+          
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -145,8 +294,10 @@ const styles = StyleSheet.create({
   },
   homeDealsContainer: {
     flexDirection: "row",
-              alignItems: "center",
-              flexWrap: "wrap",
-              // marginTop: 10,
-  }
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  placeholderStyles: {
+    fontWeight: "bold",
+  },
 });
