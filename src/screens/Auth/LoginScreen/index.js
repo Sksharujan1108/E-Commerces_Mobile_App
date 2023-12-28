@@ -48,7 +48,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
       }
 
       axios
-      .post ('http://192.168.87.198:8000/login', user)
+      .post ('http://10.0.2.2:8000/login', user)
       .then((response) => {
         console.log(response);
         const token = response.data.token
@@ -108,11 +108,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
           </View>
   
           <View style={{ marginTop: 100 }}>
-            <Pressable 
+            <TouchableOpacity 
              onPress={handleLogin}
              style={styles.Btn_Container}>
               <Text style={styles.Btn_txt}> LogIn &nbsp; &nbsp; 🤓 </Text>
-            </Pressable>
+            </TouchableOpacity>
   
             <View style={{ flexDirection: "row", alignContent: 'center', justifyContent: 'center' }}>
               <Text
@@ -127,12 +127,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
                 Don't have an account?{" "}
               </Text>
   
-              <Pressable onPress={() => navigation.navigate('Register')}>
+              <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                 <Text style = {styles.SignUp_txt}>
                   {" "}
                   Sign Up!{" "}
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
         </KeyboardAvoidingView>

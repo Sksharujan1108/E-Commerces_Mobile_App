@@ -54,7 +54,7 @@ const RegisterScreen = () => {
 
     // send a POST  request to the backend API to register the user
     axios
-      .post("http://192.168.87.198:8000/register", user)
+      .post("http://10.0.2.2:8000/register", user)
       .then((response) => {
         console.log(response);
         setMessageType("success");
@@ -134,9 +134,9 @@ const RegisterScreen = () => {
         </View>
 
         <View style={{ marginTop: 100 }}>
-          <Pressable onPress={handleRegister} style={styles.Btn_Container}>
+          <TouchableOpacity onPress={handleRegister} style={styles.Btn_Container}>
             <Text style={styles.Btn_txt}> Register &nbsp; &nbsp; 🤓 </Text>
-          </Pressable>
+          </TouchableOpacity>
 
           <View
             style={{
@@ -157,9 +157,9 @@ const RegisterScreen = () => {
               All ready have an account?{" "}
             </Text>
 
-            <Pressable onPress={() => navigation.navigate("Login")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
               <Text style={styles.SignUp_txt}> Sign In&nbsp;! </Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
 
