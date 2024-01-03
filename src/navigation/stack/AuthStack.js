@@ -6,7 +6,7 @@ import LoginScreen from '../../screens/Auth/LoginScreen';
 import RegisterScreen from '../../screens/Auth/RegisterScreen';
 import HomeScreen from '../../screens/App/HomeScreen';
 import BootomTab from '../tap/BottomTab';
-import ProductInfoScreen from '../../screens/App/ProfileInfoScreen';
+import ProductInfoScreen from '../../screens/App/ProductInfoScreen';
 
 const Stack = createNativeStackNavigator();
 

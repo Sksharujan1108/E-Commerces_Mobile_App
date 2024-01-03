@@ -71,7 +71,7 @@ const HomeScreen = () => {
 
           <Pressable>
             <Text style={styles.addressTxt}>
-              Deliver to Sarujan - Chennai 560021
+              Deliver to Sarujan - mannar 560021
             </Text>
           </Pressable>
 
@@ -79,6 +79,7 @@ const HomeScreen = () => {
         </Pressable>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+
           {HomelistDatq.map((item, index) => (
             <Pressable key={index} style={styles.homeListContainer}>
               <Image style={styles.imgView} source={{ uri: item.image }} />
@@ -111,6 +112,7 @@ const HomeScreen = () => {
         </Text>
 
         <View style={styles.homeDealsContainer}>
+
           {Homedeals.map((item, index) => (
             <Pressable
               key={index}
@@ -166,6 +168,7 @@ const HomeScreen = () => {
                 oldPrice: item?.oldPrice,
                 item: item,
               })}
+               
               style={{
                 marginVertical: 10,
                 alignItems: "center",
