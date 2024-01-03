@@ -1,17 +1,35 @@
 import { Dimensions, ImageBackground, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { ColorSheet } from '../../../Utilis/ColorSheet'
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useAppDispatch, useAppSelector } from '../../../feature/stateHooks';
+import { addToCart } from '../../../feature/Slices/CardSlices';
 
 const ProductInfoScreen  = () => {
   const route =  useRoute()  
   const navigation = useNavigation()
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  const dispatch = useAppDispatch()
+
+  const CartData = useAppSelector((state) => state.cartForm?.cart)
+  console.log("CartData+++++++++++++", CartData)
+
+  console.log("route?.params?.item*****", route?.params?.item)
 
   const { width } = Dimensions.get("window");
   const height = (width * 100) / 100;
+
+  const addItemToCart = (item) => {
+    setAddedToCart(true);
+    dispatch(addToCart(item));
+    setTimeout(() => {
+      setAddedToCart(false);
+    }, 5000)
+  }
 
   return (
     <ScrollView showsVerticalScrollIndicator = {false} 
@@ -164,7 +182,9 @@ const ProductInfoScreen  = () => {
               IN Stock
             </Text>
 
-            <Pressable style = {{
+            <Pressable 
+              onPress = {() => addItemToCart(route?.params?.item)}
+            style = {{
               backgroundColor: '#FFC72C', 
               padding: 10,
               borderRadius: 20,
@@ -173,7 +193,14 @@ const ProductInfoScreen  = () => {
               marginHorizontal: 10,
               marginVertical: 10,
               }}>
-              <Text> Add To Card </Text>
+
+                {addedToCart ? (
+                  <View>
+                    <Text> Added To Card </Text>
+                  </View>
+                ) : (
+                    <Text> Add To Card </Text>
+                )}              
             </Pressable>
 
             <Pressable style = {{

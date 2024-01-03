@@ -17,6 +17,7 @@ import { ColorSheet } from "../../../Utilis/ColorSheet";
 import { Homedeals, HomelistDatq, SlideShowimages, offers } from "../../../Utilis/Image";
 import { useNavigation } from "@react-navigation/native";
 import ProductItem from "../../../component/ProductItem";
+import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
 
 const HomeScreen = () => {
   const navigation = useNavigation()
@@ -115,6 +116,16 @@ const HomeScreen = () => {
 
           {Homedeals.map((item, index) => (
             <Pressable
+            onPress={() => navigation.navigate("Info", {
+              id: item.id,
+              title: item.title,
+              price: item?.price,
+              carouselImages: item?.carouselImages,
+              color: item?.color,
+              size: item?.size,
+              oldPrice: item?.oldPrice,
+              item: item,
+            })}
               key={index}
               style={{
                 marginVertical: 10,
