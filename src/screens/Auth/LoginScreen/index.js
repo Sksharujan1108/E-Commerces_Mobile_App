@@ -32,7 +32,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
           const token = await AsyncStorage.getItem('AuthToken')
 
           if(token) {
-            navigation.navigate("Main")
+            console.log('**************', token)
+            navigation.replace("Main")
           }
         } catch(err) {
           console.log("Error", err)
@@ -50,9 +51,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
       axios
       .post ('http://10.0.2.2:8000/login', user)
       .then((response) => {
-        console.log(response);
+        console.log('response+++++++++', response);
         const token = response.data.token
         AsyncStorage.setItem('AuthToken', token);
+        console.log('Navigating to Main screen...');
         navigation.replace('Main')
       })
       .catch((err) => {
