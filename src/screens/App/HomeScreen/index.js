@@ -18,12 +18,15 @@ import { Homedeals, HomelistDatq, SlideShowimages, offers } from "../../../Utili
 import { useNavigation } from "@react-navigation/native";
 import ProductItem from "../../../component/ProductItem";
 import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
+import { BottomModal, ModalContent, SlideAnimation } from "react-native-modals";
 
 const HomeScreen = () => {
   const navigation = useNavigation()
 
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
+  const [modelVisible, setmodelVisible] = useState(false);
+
   const [category, setCategory] = useState("jewelery");
   const [items, setItems] = useState([
     { label: "Men's clothing", value: "men's clothing" },
@@ -52,7 +55,8 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
+      <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.Searchcontainer}>
           <Pressable style={styles.SearchBox}>
@@ -270,6 +274,27 @@ const HomeScreen = () => {
         </View>
       </ScrollView>
     </SafeAreaView>
+
+    <BottomModal 
+      onBackdropPress = {() => setmodelVisible(!modelVisible)}
+      swipeDirection = {["up", 'down']}
+      swipeThreshold = {200}
+      modalAnimation = {
+        new SlideAnimation({
+          slideFrom: 'bottom',
+        })
+      }
+      onHardwareBackPress = {() => setmodelVisible(!modelVisible)}
+      visible = {modelVisible}
+      onTouchOutside = {() => setmodelVisible(!modelVisible)}
+    >
+        <ModalContent>
+          
+        </ModalContent>
+
+    </BottomModal>
+
+    </>
   );
 };
 
