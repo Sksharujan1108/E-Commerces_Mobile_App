@@ -7,6 +7,7 @@ import RegisterScreen from '../../screens/Auth/RegisterScreen';
 import HomeScreen from '../../screens/App/HomeScreen';
 import BootomTab from '../tap/BottomTab';
 import ProductInfoScreen from '../../screens/App/ProductInfoScreen';
+import AddAddressScreen from '../../screens/App/AddAddressScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,12 @@ const AuthStack = () => {
               name="Info" 
               component={ProductInfoScreen} 
             />
+
+            <Stack.Screen 
+              name="Address" 
+              component={AddAddressScreen} 
+            />
+
             
         </Stack.Navigator>
     </NavigationContainer>
