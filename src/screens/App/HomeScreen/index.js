@@ -59,6 +59,7 @@ const HomeScreen = () => {
       <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.Searchcontainer}>
+
           <Pressable style={styles.SearchBox}>
             <AntDesign
               style={{ paddingLeft: 10 }}
@@ -68,10 +69,14 @@ const HomeScreen = () => {
             />
             <TextInput placeholder="Search Product" />
           </Pressable>
+
           <Feather name="mic" size={24} color="black" />
         </View>
 
-        <Pressable style={styles.addressContainer}>
+        <Pressable style={styles.addressContainer} 
+          onPress = {() => setmodelVisible(!modelVisible)}
+        >
+
           <Ionicons name="location-outline" size={24} color="black" />
 
           <Pressable>
@@ -288,8 +293,10 @@ const HomeScreen = () => {
       visible = {modelVisible}
       onTouchOutside = {() => setmodelVisible(!modelVisible)}
     >
-        <ModalContent>
-          
+        <ModalContent style = {{width: '100%', height: 400}}>
+          <View>
+            <Text> Choose Your Location </Text>
+          </View>
         </ModalContent>
 
     </BottomModal>

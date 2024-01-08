@@ -44,13 +44,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
     const handleLogin = () => {
       console.log('++++++++++++++++++++++++++++')
-      console.log("User++++", user)
-
       const user = {
         email: email,
         password: password,
-      }
-      
+      } 
 
       axios
       .post ('http://10.0.2.2:8000/login', user)
