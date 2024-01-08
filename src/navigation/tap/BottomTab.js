@@ -9,6 +9,7 @@ import ProfileScreen from '../../screens/App/ProfileScreen';
 const Tab = createBottomTabNavigator();
 
 const BootomTab = () => (
+  
     <Tab.Navigator>
         <Tab.Screen 
           name="Home" 

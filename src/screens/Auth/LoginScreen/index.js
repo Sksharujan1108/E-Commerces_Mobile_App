@@ -32,7 +32,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
           const token = await AsyncStorage.getItem('AuthToken')
 
           if(token) {
-            navigation.navigate("Main")
+            console.log('**************', token)
+            navigation.replace("Main")
           }
         } catch(err) {
           console.log("Error", err)
@@ -42,17 +43,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
     }, [])
 
     const handleLogin = () => {
+      console.log('++++++++++++++++++++++++++++')
       const user = {
         email: email,
         password: password,
-      }
+      } 
 
       axios
       .post ('http://10.0.2.2:8000/login', user)
       .then((response) => {
-        console.log(response);
+        console.log('response+++++++++', response);
         const token = response.data.token
         AsyncStorage.setItem('AuthToken', token);
+        console.log('Navigating to Main screen...');
         navigation.replace('Main')
       })
       .catch((err) => {
@@ -60,7 +63,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
         console.log(err)
       }) 
     }
-  
+  // console.log("User++++", user)
   
     return (
       <SafeAreaView style={styles.container}>
@@ -127,7 +130,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
                 Don't have an account?{" "}
               </Text>
   
-              <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+              <TouchableOpacity 
+                onPress={() => navigation.navigate('Register')}>
                 <Text style = {styles.SignUp_txt}>
                   {" "}
                   Sign Up!{" "}

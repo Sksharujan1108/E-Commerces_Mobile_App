@@ -1,16 +1,17 @@
-// Assuming this is in your store setup file
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import logger from 'redux-logger';
+import rootReducer from './rootReducer';
 
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import registerUserDataReducer from '../feature/Slices/RegisterSlices'; // Correct the import path accordingly
+// configure store with middleware and reducers
 
-// Combine reducers (if you have multiple reducers)
-const rootReducer = combineReducers({
-  userData: registerUserDataReducer,
-  // ...other reducers if available
-});
+const middleware = [logger];
 
-export const store = configureStore({
+const store = configureStore({
   reducer: rootReducer,
+  middleware: [...getDefaultMiddleware({ serializableCheck: false }), ...middleware],
 });
+
+export const RootState = store.getState;
+export const AppDispatch = store.dispatch;
 
 export default store;

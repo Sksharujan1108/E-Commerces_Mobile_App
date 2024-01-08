@@ -30,9 +30,6 @@ import {
 const RegisterScreen = () => {
   const dispatch = useDispatch();
 
-  const UserRegister = useSelector(registerDataDetails);
-  const UserRegisterStatus = useSelector(registerDataStatus);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
