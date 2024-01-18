@@ -179,3 +179,47 @@ const sendVerification = async (email,verificationToken) => {
       response.status(500).json({message: 'Login Failed'})
     }
   })
+
+
+// EndPoint To Store A New Address
+app.post('/addresses', async (request, response) => {
+  try {
+    const { userId , address} = request.body;
+
+    // Fine The User
+    const user = await Users.findById({ userId })
+    if(!user) {
+      return response.status(404).json({ message : "User Not Found" });
+    }
+
+    // Add The New Address To The User's Addresses Array
+    user.addresses.push(address);
+
+    // Save The Update USer  In the BackEnd
+    await user.save()
+
+    response.status(200).json({ message: 'Address Created SuccessFully'})
+
+  } catch(err) {
+    response.status(500).json({ message: 'Error Adding Address'})
+  }
+})
+
+// EndPoint To Get All The Addresses Of A Particular USer
+app.get('/get/addresses/:userId', async (request, response) => {
+  try {
+    const userId = request.params.userId
+
+    // Find The User
+    const user = await Users.findById(userId)
+    if(!user) {
+      return response.status(404).json({ message: 'User Not Found'})
+    }
+
+    const addresses =user.addresses;
+    response.status(200).json(addresses)
+    
+  } catch (err) {
+    response.status(500).json({ message: 'Error Reterieveing The Addresses'})
+  }
+})
