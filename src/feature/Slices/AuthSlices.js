@@ -12,8 +12,8 @@ const INITIAL_STATE = {
   ...DEFAULT_STATE,
 };
 
-const authSlice = createSlice({
-  name: "auth",
+const AuthSlice = createSlice({
+  name: "authForm",
   initialState: INITIAL_STATE,
   reducers: {
     resetAuth: () => DEFAULT_STATE,
@@ -36,7 +36,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { resetAuth } = authSlice.actions;
+export const { resetAuth } = AuthSlice.actions;
 
 // Selectors
 // Post Register
@@ -45,4 +45,4 @@ export const selectRegisterAuthenticateData = (state) => state.auth.registerAuth
 export const selectRegisterAuthenticateStatus = (state) => state.auth.registerAuthenticateDataStatus;
 // End ************
 
-export default authSlice.reducer;
+export default AuthSlice;

@@ -9,7 +9,7 @@ const port = 8000;
 const cors = require("cors");
 
 const corsOptions = {
-  origin: 'http://192.168.83.198:8000/register', // Replace with the actual URL of your frontend
+  origin: 'http://10.0.2.2:8000/register', // Replace with the actual URL of your frontend
   optionsSuccessStatus: 200,
 };
 
@@ -67,7 +67,7 @@ const sendVerification = async (email,verificationToken) => {
   
     // Compose The Email Message
     const mailoptions = {
-      from: 'amazon.com',
+      from: 'amazon.com',       
       to: email,
       subject: 'Verify Your Email',
       text: `Please click the following link to verify your email: http://192.168.83.198:8000/verify/${verificationToken}`,
@@ -91,13 +91,25 @@ const sendVerification = async (email,verificationToken) => {
       const { name, email, password } = request.body;
 
       if(!name || !email || !password) {
-        return response.status(400).json({message: "Please Input All Details"})
+        return response.status(400).json({ 
+          status: '400',
+          message: 'Bad Request',
+          errors: [
+            'Please Input All Details'
+          ],
+        })
       }
   
       // Check if the email is Already Registered
       const existingUser = await Users.findOne({ email });
       if (existingUser) {
-        return response.status(400).json({ message: 'Email Already Registered' });
+        return response.status(400).json({ 
+          status: '400',
+          message: 'Bad Request',
+          errors: [
+            'All Ready Exit, Please choose a different email.'
+          ], 
+        });
       }
   
       // create A New User
@@ -113,10 +125,19 @@ const sendVerification = async (email,verificationToken) => {
       // Send Verification Email To the User
       sendVerification(newUser.email, newUser.verificationToken)
   
-      response.status(201).json({ message: 'Registration Successful' });
+      response.status(201).json({ 
+        status: '201',
+        response: 'Registration Successful' 
+      });
     } catch (err) {
       console.log('Error SignUp User', err);
-      response.status(500).json({ message: 'Registration Failed' });
+      response.status(500).json({ 
+        status: '500',
+        message: 'Internal Server Error', 
+        errors: [
+          'An error occurred while processing the registration.'
+        ],
+      });
     }
   });
   

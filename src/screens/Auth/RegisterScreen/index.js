@@ -27,6 +27,7 @@ import { selectAuthSliceStatus } from "../../../feature/Slices/AuthSlices";
 
 const RegisterScreen = () => {
   const dispatch = useAppDispatch();
+
   // const authSliceStatus = useAppSelector(selectAuthSliceStatus);
 
   const [name, setName] = useState("");
