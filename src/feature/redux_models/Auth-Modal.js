@@ -16,7 +16,7 @@ export default {
   export const authError = {
     message: undefined,
     status: undefined,
-    errors: any | []
+    errors: []
   };
   
   // Post Register

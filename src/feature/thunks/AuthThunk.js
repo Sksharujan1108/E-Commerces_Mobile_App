@@ -6,7 +6,7 @@ import { loginRequestAuthenticateService, registerRequestAuthenticateService } f
 export const registerRequestAuthenticate = createAsyncThunk(
   "auth/register",
   async (body, { rejectWithValue }) => {
-    console.log("Register********")
+    console.log("Register********", body)
     try {
       const response = await registerRequestAuthenticateService(body);
       console.log('==registerRequestAuthenticate=======registerRequestAuthenticate=========', response);

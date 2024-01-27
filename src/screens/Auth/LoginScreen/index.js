@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
 import { loginRequestAuthenticate } from "../../../feature/thunks/AuthThunk";
 import { selectLogInAuthenticateData, selectLogInAuthenticateStatus } from "../../../feature/Slices/AuthSlices";
 import { STATUS } from "../../../Utilis/Contants";
+import { setCredentials } from "../../../feature/Slices/ConstantsSlices";
   
   const LoginScreen = () => {
 
@@ -70,6 +71,7 @@ import { STATUS } from "../../../Utilis/Contants";
     } else if (password == '') {
       ErrorFlash(Constants.PASS_REQ)
     } else {
+      dispatch(setCredentials({ email: userName, password: password }));
       dispatch(loginRequestAuthenticate({
         email : email,
         password : password

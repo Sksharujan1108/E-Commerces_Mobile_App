@@ -38,7 +38,12 @@ const AuthSlice = createSlice({
         state.authSliceStatus = STATUS.SUCCEEDED;
         state.registerAuthenticateDataStatus = STATUS.SUCCEEDED;
       })
-      .addCase(registerRequestAuthenticate.rejected, (state) => {
+      .addCase(registerRequestAuthenticate.rejected, (state, action) => {
+        if (action?.payload?.state === 401) {
+          Alert.alert(action?.payload?.errors[0]) 
+          } else if (action?.error) {
+            Alert.alert (Constants.INVALID_CREDENTIALS)
+          }
         state.authSliceStatus = STATUS.FAILED;
         state.registerAuthenticateDataStatus = STATUS.FAILED;
       });
@@ -59,7 +64,7 @@ const AuthSlice = createSlice({
         if (action?.payload?.status === 401) {
           Alert.alert (action?.payload?.errorDiscription[0])
         } else if (action?.error) {
-          Alert.alert (Constants.INVALID_CREDENTIALS)
+          Alert.alert (action?.error?.message)
         }
 
         state.authSliceStatus = STATUS.FAILED;

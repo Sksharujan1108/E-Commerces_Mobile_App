@@ -91,8 +91,8 @@ const sendVerification = async (email,verificationToken) => {
       const { name, email, password } = request.body;
 
       if(!name || !email || !password) {
-        return response.status(400).json({ 
-          status: '400',
+        return response.status(401).json({ 
+          status: '401',
           message: 'Bad Request',
           errors: [
             'Please Input All Details'
@@ -103,8 +103,8 @@ const sendVerification = async (email,verificationToken) => {
       // Check if the email is Already Registered
       const existingUser = await Users.findOne({ email });
       if (existingUser) {
-        return response.status(400).json({ 
-          status: '400',
+        return response.status(401).json({ 
+          status: '401',
           message: 'Bad Request',
           errors: [
             'All Ready Exit, Please choose a different email.'
@@ -125,8 +125,8 @@ const sendVerification = async (email,verificationToken) => {
       // Send Verification Email To the User
       sendVerification(newUser.email, newUser.verificationToken)
   
-      response.status(201).json({ 
-        status: '201',
+      response.status(200).json({ 
+        status: '200',
         responseDto: {
           message: 'Registration Successful'
         }
