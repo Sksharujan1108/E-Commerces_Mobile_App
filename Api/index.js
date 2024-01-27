@@ -127,7 +127,9 @@ const sendVerification = async (email,verificationToken) => {
   
       response.status(201).json({ 
         status: '201',
-        response: 'Registration Successful' 
+        responseDto: {
+          message: 'Registration Successful'
+        }
       });
     } catch (err) {
       console.log('Error SignUp User', err);
@@ -176,30 +178,57 @@ const sendVerification = async (email,verificationToken) => {
 
 
   // EndPoint To Login The USer
-  app.post('/login', async (request, response) => {
-    try {
-      const { email, password } = request.body
+// Endpoint To Login The USer
+// Endpoint To Login The USer
+app.post('/login', async (request, response) => {
+  try {
+    const { email, password } = request.body;
 
-      // Check USer Exit
-      const user = await Users.findOne({ email })
-      if(!user) {
-        return response.status(401).json({message: 'Invaild Email OR Password'})
-      }
-
-      // check if the password is correct
-      if(user.password !== password) {
-        return response.status(401).json({message: 'Invaild Password'})
-      }
-
-      // Generate Token
-      const token = jwt.sign({userID: user._id}, secretKey)
-
-      response.status(200).json({token})
-
-    } catch(err) {
-      response.status(500).json({message: 'Login Failed'})
+    // Check if the user exists
+    const user = await Users.findOne({ email });
+    if (!user) {
+      return response.status(401).json({
+        status: 401,
+        jwttoken: null,
+        refreshToken: null,
+        errorDiscription: ['Invalid Email or Password'],
+      });
     }
-  })
+
+    // Check if the password is correct
+    if (user.password !== password) {
+      return response.status(401).json({
+        status: 401,
+        jwttoken: null,
+        refreshToken: null,
+        errorDiscription: ['Invalid Password'],
+      });
+    }
+
+    // Generate Token
+    const jwttoken = jwt.sign({ userID: user._id }, secretKey);
+
+    // Simulated refresh token for the example
+    const refreshToken = jwt.sign({ userID: user._id, refresh: true }, secretKey);
+
+    response.status(200).json({
+      status: 200,
+      jwttoken,
+      refreshToken,
+      errorDiscription: null,
+    });
+  } catch (err) {
+    console.error('Error during login:', err);
+    response.status(500).json({
+      status: 500,
+      jwttoken: null,
+      refreshToken: null,
+      errorDiscription: ['Login Failed'],
+    });
+  }
+});
+
+
 
 
 //endpoint to store a new address to the backend

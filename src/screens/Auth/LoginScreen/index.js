@@ -20,8 +20,14 @@ import {
 import { styles } from "./styles";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
+import { loginRequestAuthenticate } from "../../../feature/thunks/AuthThunk";
   
   const LoginScreen = () => {
+
+    const dispatch = useAppDispatch();
+
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigation = useNavigation()
@@ -42,28 +48,41 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
       checkLoginStatus();
     }, [])
 
-    const handleLogin = () => {
-      console.log('++++++++++++++++++++++++++++')
-      const user = {
-        email: email,
-        password: password,
-      } 
+    // const handleLogin = () => {
+    //   console.log('++++++++++++++++++++++++++++')
+    //   const user = {
+    //     email: email,
+    //     password: password,
+    //   } 
 
-      axios
-      .post ('http://192.168.83.198:8000/login', user)
-      .then((response) => {
-        console.log('response+++++++++', response);
-        const token = response.data.token
-        AsyncStorage.setItem('AuthToken', token);
-        console.log('Navigating to Main screen...');
-        navigation.replace('Main')
-      })
-      .catch((err) => {
-        Alert.alert("Login Error", "Invaild LogIn")
-        console.log(err)
-      }) 
-    }
+    //   axios
+    //   .post ('http://192.168.83.198:8000/login', user)
+    //   .then((response) => {
+    //     console.log('response+++++++++', response);
+    //     const token = response.data.token
+    //     AsyncStorage.setItem('AuthToken', token);
+    //     console.log('Navigating to Main screen...');
+    //     navigation.replace('Main')
+    //   })
+    //   .catch((err) => {
+    //     Alert.alert("Login Error", "Invaild LogIn")
+    //     console.log(err)
+    //   }) 
+    // }
   // console.log("User++++", user)
+
+  const handleLogin = () => {
+    if (email == '') {
+      ErrorFlash(Constants.EMAIL_REQ)
+    } else if (password == '') {
+      ErrorFlash(Constants.PASS_REQ)
+    } else {
+      dispatch(loginRequestAuthenticate({
+        email : email,
+        password : password
+      }))
+    }
+  }
   
     return (
       <SafeAreaView style={styles.container}>
