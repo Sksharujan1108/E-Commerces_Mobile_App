@@ -71,7 +71,7 @@ import { setCredentials } from "../../../feature/Slices/ConstantsSlices";
     } else if (password == '') {
       ErrorFlash(Constants.PASS_REQ)
     } else {
-      dispatch(setCredentials({ email: userName, password: password }));
+      dispatch(setCredentials({ email: email, password: password }));
       dispatch(loginRequestAuthenticate({
         email : email,
         password : password

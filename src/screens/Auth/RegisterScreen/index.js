@@ -61,7 +61,7 @@ const RegisterScreen = () => {
       ErrorFlash(Constants.PASS_REQ)
     } else {
       dispatch(registerRequestAuthenticate({
-        username : name,
+        name : name,
         email : email,
         password : password
       }))
