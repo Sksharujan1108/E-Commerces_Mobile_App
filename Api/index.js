@@ -9,7 +9,7 @@ const port = 8000;
 const cors = require("cors");
 
 const corsOptions = {
-  origin: 'http://10.0.2.2:8000/register', // Replace with the actual URL of your frontend
+  origin: 'http://192.168.83.198:8000/register', // Replace with the actual URL of your frontend
   optionsSuccessStatus: 200,
 };
 
@@ -70,7 +70,7 @@ const sendVerification = async (email,verificationToken) => {
       from: 'amazon.com',
       to: email,
       subject: 'Verify Your Email',
-      text: `Please click the following link to verify your email: http://10.0.2.2:8000/verify/${verificationToken}`,
+      text: `Please click the following link to verify your email: http://192.168.83.198:8000/verify/${verificationToken}`,
     } ;
   
     // send The Email
@@ -181,45 +181,44 @@ const sendVerification = async (email,verificationToken) => {
   })
 
 
-// EndPoint To Store A New Address
-app.post('/addresses', async (request, response) => {
+//endpoint to store a new address to the backend
+app.post("/addresses", async (req, res) => {
   try {
-    const { userId , address} = request.body;
+    const { userId, address } = req.body;
 
-    // Fine The User
-    const user = await Users.findById({ userId })
-    if(!user) {
-      return response.status(404).json({ message : "User Not Found" });
+    //find the user by the Userid
+    const user = await Users.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Add The New Address To The User's Addresses Array
+    //add the new address to the user's addresses array
     user.addresses.push(address);
 
-    // Save The Update USer  In the BackEnd
-    await user.save()
+    //save the updated user in te backend
+    await user.save();
 
-    response.status(200).json({ message: 'Address Created SuccessFully'})
-
-  } catch(err) {
-    response.status(500).json({ message: 'Error Adding Address'})
+    res.status(200).json({ message: "Address created Successfully" });
+    
+  } catch (error) {
+    res.status(500).json({ message: "Error addding address" });
   }
-})
+});
 
-// EndPoint To Get All The Addresses Of A Particular USer
-app.get('/get/addresses/:userId', async (request, response) => {
+//endpoint to get all the addresses of a particular user
+app.get("/addresses/:userId", async (req, res) => {
   try {
-    const userId = request.params.userId
+    const userId = req.params.userId;
 
-    // Find The User
-    const user = await Users.findById(userId)
-    if(!user) {
-      return response.status(404).json({ message: 'User Not Found'})
+    const user = await Users.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    const addresses =user.addresses;
-    response.status(200).json(addresses)
-    
-  } catch (err) {
-    response.status(500).json({ message: 'Error Reterieveing The Addresses'})
+    const addresses = user.addresses;
+    res.status(200).json({ addresses });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieveing the addresses" });
   }
-})
+});
