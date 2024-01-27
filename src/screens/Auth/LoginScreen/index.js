@@ -18,19 +18,35 @@ import {
   import { AntDesign } from "@expo/vector-icons";
   import { useNavigation } from "@react-navigation/native";
 import { styles } from "./styles";
-import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
 import { loginRequestAuthenticate } from "../../../feature/thunks/AuthThunk";
+import { selectLogInAuthenticateData, selectLogInAuthenticateStatus } from "../../../feature/Slices/AuthSlices";
+import { STATUS } from "../../../Utilis/Contants";
   
   const LoginScreen = () => {
 
+    const navigation = useNavigation()
+
     const dispatch = useAppDispatch();
 
+    const logInAuthenticateStatus = useAppSelector(selectLogInAuthenticateStatus);
+    console.log('logInAuthenticateData********', logInAuthenticateStatus)
+
+    const logInAuthenticateData = useAppSelector(selectLogInAuthenticateData);
+    console.log('logInAuthenticateData********', logInAuthenticateData)
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigation = useNavigation()
+    
+    useEffect(() => {
+      if (logInAuthenticateStatus === STATUS.SUCCEEDED) {
+        if (logInAuthenticateData.status === 200) {
+          Alert.alert ('LogIn Success')
+          navigation.navigate('Main')
+        }
+      }
+    }, [logInAuthenticateStatus])
 
     useEffect(() => {
       const checkLoginStatus = async () => {
@@ -46,30 +62,7 @@ import { loginRequestAuthenticate } from "../../../feature/thunks/AuthThunk";
         }
       };
       checkLoginStatus();
-    }, [])
-
-    // const handleLogin = () => {
-    //   console.log('++++++++++++++++++++++++++++')
-    //   const user = {
-    //     email: email,
-    //     password: password,
-    //   } 
-
-    //   axios
-    //   .post ('http://192.168.83.198:8000/login', user)
-    //   .then((response) => {
-    //     console.log('response+++++++++', response);
-    //     const token = response.data.token
-    //     AsyncStorage.setItem('AuthToken', token);
-    //     console.log('Navigating to Main screen...');
-    //     navigation.replace('Main')
-    //   })
-    //   .catch((err) => {
-    //     Alert.alert("Login Error", "Invaild LogIn")
-    //     console.log(err)
-    //   }) 
-    // }
-  // console.log("User++++", user)
+    }, [logInAuthenticateStatus])
 
   const handleLogin = () => {
     if (email == '') {

@@ -191,7 +191,7 @@ app.post('/login', async (request, response) => {
         status: 401,
         jwttoken: null,
         refreshToken: null,
-        errorDiscription: ['Invalid Email or Password'],
+        errorDiscription: ['Invalid Email'],
       });
     }
 
