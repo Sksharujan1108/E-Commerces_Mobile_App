@@ -8,5 +8,5 @@ export function registerRequestAuthenticateService(registerAuthRequestBody) {
 
 // Post Login
 export function loginRequestAuthenticateService(loginAuthRequestBody) {
-  return requests.post(`${BASE_URL}/register`, loginAuthRequestBody);
+  return requests.post(`${BASE_URL}/login`, loginAuthRequestBody);
 }

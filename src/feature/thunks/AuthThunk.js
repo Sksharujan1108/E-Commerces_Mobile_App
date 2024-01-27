@@ -25,7 +25,7 @@ export const registerRequestAuthenticate = createAsyncThunk(
 
 // Post Login
 export const loginRequestAuthenticate = createAsyncThunk(
-  "auth/register",
+  "auth/login***",
   async (body, { rejectWithValue }) => {
     console.log("login********")
     try {
