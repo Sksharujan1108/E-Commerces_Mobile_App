@@ -4,7 +4,7 @@ import { addressRequestService } from "../Service/api_calls/Address-Service";
 
 // Post Register
 export const addressRequest = createAsyncThunk(
-  "auth/register",
+  "addressForm/addressRequest",
   async (body, { rejectWithValue }) => {
     console.log("address********", body)
     try {

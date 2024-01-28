@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState,useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwt_decode from "jwt-decode";
+import * as jwt_decode from "jwt-decode";
 import { useNavigation } from "@react-navigation/native";
 import { UserType } from '../../../Utilis/UserContext'
 import { Constants } from "../../../Utilis/Contants";
@@ -24,10 +24,10 @@ const AddressScreen = () => {
   const dispatch = useAppDispatch();
 
   const addressDataStatus = useAppSelector(selectAddressStatus);
-    console.log('logInAuthenticateData********', addressDataStatus)
+    console.log('addressDataStatus********', addressDataStatus)
 
     const addressData = useAppSelector(selectAddressData);
-    console.log('logInAuthenticateData********', addressData)
+    console.log('addressData********', addressData)
 
   const [name, setName] = useState("");
   const [mobileNo, setMobileNo] = useState("");
@@ -40,7 +40,7 @@ const AddressScreen = () => {
   useEffect(() => {
     const fetchUser = async() => {
         const token = await AsyncStorage.getItem("authToken");
-        const decodedToken = jwt_decode(token);
+        const decodedToken = jwt_decode.default(token);
         const userId = decodedToken.userId;
         setUserId(userId)
     }
@@ -52,7 +52,7 @@ const AddressScreen = () => {
   useEffect(() => {
     if (addressDataStatus === STATUS.SUCCEEDED) {
       if (addressData.status === 200) {
-        Alert.alert(addressData?.responseDto?.message)
+        Alert.alert(`${addressData?.responseDto?.message}`)
         navigation.goBack()
       }
     }

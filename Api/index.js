@@ -158,7 +158,7 @@ const sendVerification = async (email,verificationToken) => {
         return res.status(401).json({
           status: 401,
           message: 'Bad Request',
-          errors: [
+          errorDiscription: [
             'Invalid Token'
           ]
         });
@@ -181,7 +181,7 @@ const sendVerification = async (email,verificationToken) => {
         status: 500,
         message: 'Internal Server Error',
         errors: [
-          'Email Verification Failed'
+          'An error occurred while processing the request'
         ]
       });
     }
@@ -211,7 +211,7 @@ app.post('/login', async (request, response) => {
         status: 401,
         jwttoken: null,
         refreshToken: null,
-        errors: [
+        errorDiscription: [
           'Invalid Email'
         ],
       });
@@ -250,8 +250,8 @@ app.post('/login', async (request, response) => {
       message: 'Internal Server Error',
       jwttoken: null,
       refreshToken: null,
-      errorDiscription: [
-        'Login Failed'
+      errors: [
+        'An error occurred while processing the request'
       ],
     });
   }
@@ -271,7 +271,7 @@ app.post("/addresses", async (req, res) => {
       return res.status(404).json({ 
           status: 404,
           message: 'Bad Request',
-          errors: [
+          errorDiscription: [
             'User not found'
           ],
       });
@@ -294,8 +294,8 @@ app.post("/addresses", async (req, res) => {
     res.status(500).json({ 
       status: 500,
       message: 'Internal Server Error',
-        errorDiscription: [
-            'User not found'
+        errors: [
+            'An error occurred while processing the request'
           ],
     });
   }
@@ -311,7 +311,7 @@ app.get("/addresses/:userId", async (req, res) => {
       return res.status(404).json({
         status: 404,
         message: 'Not Found',
-        errors: [
+        errorDiscription: [
           'User not found'
         ]
       });
@@ -329,7 +329,7 @@ app.get("/addresses/:userId", async (req, res) => {
     res.status(500).json({
       status: 500,
       message: 'Internal Server Error',
-      errorDiscription: [
+      errors: [
         'Error retrieving the addresses'
       ]
     });

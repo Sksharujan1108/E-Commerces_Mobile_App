@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addressRequest } from "../thunks/AddressThunk";
 import { STATUS } from "../../Utilis/Contants";
+import { Alert } from "react-native";
 
 const DEFAULT_STATE = {
   addressSliceStatus: undefined,
@@ -34,9 +35,9 @@ const AddressSlice = createSlice({
       })
       .addCase(addressRequest.rejected, (state, action) => {
         if (action?.payload?.state === 404) {
-            Alert.alert(action?.payload?.errors[0]) 
+            Alert.alert(`${action?.payload?.errorDiscription[0]}`) 
         } else if (action?.error) {
-              Alert.alert (action?.error?.message)
+            Alert.alert (action?.error?.message)
         }
         state.addressSliceStatus = STATUS.FAILED;
         state.addressDataStatus = STATUS.FAILED;

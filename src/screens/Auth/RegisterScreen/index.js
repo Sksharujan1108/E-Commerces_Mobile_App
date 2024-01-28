@@ -59,11 +59,11 @@ const RegisterScreen = () => {
 
   const handleRegister = () => {
     if(name == '') {
-      ErrorFlash(Constants.NAME_REQ)
+      Alert.alert(Constants.NAME_REQ)
     } else if (email == '') {
-      ErrorFlash(Constants.EMAIL_REQ)
+      Alert.alert(Constants.EMAIL_REQ)
     } else if (password == '') {
-      ErrorFlash(Constants.PASS_REQ)
+      Alert.alert(Constants.PASS_REQ)
     } else {
       dispatch(registerRequestAuthenticate({
         name : name,
