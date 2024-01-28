@@ -45,21 +45,6 @@ const RegisterScreen = () => {
   const [messageType, setMessageType] = useState(""); // Added for distinguishing message types
   const navigation = useNavigation();
 
-  const resetState = useCallback(() => {
-    setName("");
-    setEmail("");
-    setPassword("");
-    setMessage("");
-    setMessageType("");
-  }, []);
-
-  useEffect(() => {
-    if (isFocused) {
-      // Reset the state when the screen is focused
-      resetState();
-    }
-  }, [isFocused, resetState]);
-
   useEffect(() => {
     if (registerAuthenticateStatus === STATUS.SUCCEEDED) {
       if (registerAuthenticateData?.status === 200) {
