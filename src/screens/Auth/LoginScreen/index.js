@@ -43,7 +43,7 @@ import { setCredentials } from "../../../feature/Slices/ConstantsSlices";
     useEffect(() => {
       if (logInAuthenticateStatus === STATUS.SUCCEEDED) {
         if (logInAuthenticateData.status === 200) {
-          Alert.alert ('LogIn Success')
+          Alert.alert (`${logInAuthenticateData?.responseDto?.message}`)
           navigation.navigate('Main')
         }
       }

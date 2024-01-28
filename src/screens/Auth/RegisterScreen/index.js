@@ -11,14 +11,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback  } from "react";
 import { ColorSheet } from "../../../Utilis/ColorSheet";
 import { Images } from "../../../Utilis/Image";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./styles";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused  } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
 import { ErrorFlash } from "../../../Utilis/flashMessage";
 import { Constants, STATUS } from "../../../Utilis/Contants";
@@ -27,6 +27,7 @@ import { selectAuthSliceStatus, selectRegisterAuthenticateData, selectRegisterAu
 
 const RegisterScreen = () => {
   const dispatch = useAppDispatch();
+  const isFocused = useIsFocused();
 
   const authSliceStatus = useAppSelector(selectAuthSliceStatus);
 
@@ -44,10 +45,28 @@ const RegisterScreen = () => {
   const [messageType, setMessageType] = useState(""); // Added for distinguishing message types
   const navigation = useNavigation();
 
+  const resetState = useCallback(() => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setMessage("");
+    setMessageType("");
+  }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      // Reset the state when the screen is focused
+      resetState();
+    }
+  }, [isFocused, resetState]);
+
   useEffect(() => {
     if (registerAuthenticateStatus === STATUS.SUCCEEDED) {
       if (registerAuthenticateData?.status === 200) {
-        Alert.alert('Registration Successful')
+        setTimeout(() => {
+          Alert.alert(`${registerAuthenticateData?.responseDto?.message}`)
+          setMessage("");
+        })       
         navigation.goBack()
       }
     }
