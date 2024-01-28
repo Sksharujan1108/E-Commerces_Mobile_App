@@ -19,16 +19,23 @@ import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  postRegister,
-  registerDataDetails,
-  registerDataStatus,
-} from "../../../feature/Slices/RegisterSlices";
+import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
+import { ErrorFlash } from "../../../Utilis/flashMessage";
+import { Constants, STATUS } from "../../../Utilis/Contants";
+import { registerRequestAuthenticate } from "../../../feature/thunks/AuthThunk";
+import { selectAuthSliceStatus, selectRegisterAuthenticateData, selectRegisterAuthenticateStatus } from "../../../feature/Slices/AuthSlices";
 
 const RegisterScreen = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
+  const authSliceStatus = useAppSelector(selectAuthSliceStatus);
+
+  const registerAuthenticateStatus = useAppSelector(selectRegisterAuthenticateStatus);
+    console.log('registerAuthenticateStatus********', registerAuthenticateStatus?.payload?.status)
+
+    const registerAuthenticateData = useAppSelector(selectRegisterAuthenticateData);
+    console.log('registerAuthenticateData***status***status**', registerAuthenticateData?.payload?.status)
+    console.log('registerAuthenticateData********', registerAuthenticateData?.responseDto?.message)
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -37,38 +44,32 @@ const RegisterScreen = () => {
   const [messageType, setMessageType] = useState(""); // Added for distinguishing message types
   const navigation = useNavigation();
 
-  const handleRegister = () => {
-    if (!name || !email || !password) {
-      setMessageType("error");
-      setMessage("Please fill all fields");
-      return;
+  useEffect(() => {
+    if (registerAuthenticateStatus === STATUS.SUCCEEDED) {
+      if (registerAuthenticateData?.status === 200) {
+        Alert.alert('Registration Successful')
+        navigation.goBack()
+      }
     }
-    const user = {
-      name: name,
-      email: email,
-      password: password,
-    };
+  }, [registerAuthenticateStatus])
 
-    // send a POST  request to the backend API to register the user
-    axios
-      .post("http://10.0.2.2:8000/register", user)
-      .then((response) => {
-        console.log(response);
-        setMessageType("success");
-        setMessage(
-          "Registration successful",
-          "You have been registered Successfully"
-        );
-        setName("");
-        setEmail("");
-        setPassword("");
-      })
-      .catch((err) => {
-        setMessageType("error");
-        setMessage("Registration Error", "An error occurred while registering");
-        console.log("registration failed", err);
-      });
-  };
+  const handleRegister = () => {
+    if(name == '') {
+      ErrorFlash(Constants.NAME_REQ)
+    } else if (email == '') {
+      ErrorFlash(Constants.EMAIL_REQ)
+    } else if (password == '') {
+      ErrorFlash(Constants.PASS_REQ)
+    } else {
+      dispatch(registerRequestAuthenticate({
+        name : name,
+        email : email,
+        password : password
+      }))
+    }
+  }
+
+
 
   return (
     <SafeAreaView style={styles.container}>

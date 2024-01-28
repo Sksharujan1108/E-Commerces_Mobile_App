@@ -18,13 +18,36 @@ import {
   import { AntDesign } from "@expo/vector-icons";
   import { useNavigation } from "@react-navigation/native";
 import { styles } from "./styles";
-import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
+import { loginRequestAuthenticate } from "../../../feature/thunks/AuthThunk";
+import { selectLogInAuthenticateData, selectLogInAuthenticateStatus } from "../../../feature/Slices/AuthSlices";
+import { Constants, STATUS } from "../../../Utilis/Contants";
+import { setCredentials } from "../../../feature/Slices/ConstantsSlices";
   
   const LoginScreen = () => {
+
+    const navigation = useNavigation()
+
+    const dispatch = useAppDispatch();
+
+    const logInAuthenticateStatus = useAppSelector(selectLogInAuthenticateStatus);
+    console.log('logInAuthenticateData********', logInAuthenticateStatus)
+
+    const logInAuthenticateData = useAppSelector(selectLogInAuthenticateData);
+    console.log('logInAuthenticateData********', logInAuthenticateData)
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigation = useNavigation()
+    
+    useEffect(() => {
+      if (logInAuthenticateStatus === STATUS.SUCCEEDED) {
+        if (logInAuthenticateData.status === 200) {
+          Alert.alert ('LogIn Success')
+          navigation.navigate('Main')
+        }
+      }
+    }, [logInAuthenticateStatus])
 
     useEffect(() => {
       const checkLoginStatus = async () => {
@@ -40,30 +63,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
         }
       };
       checkLoginStatus();
-    }, [])
+    }, [logInAuthenticateStatus])
 
-    const handleLogin = () => {
-      console.log('++++++++++++++++++++++++++++')
-      const user = {
-        email: email,
-        password: password,
-      } 
-
-      axios
-      .post ('http://10.0.2.2:8000/login', user)
-      .then((response) => {
-        console.log('response+++++++++', response);
-        const token = response.data.token
-        AsyncStorage.setItem('AuthToken', token);
-        console.log('Navigating to Main screen...');
-        navigation.replace('Main')
-      })
-      .catch((err) => {
-        Alert.alert("Login Error", "Invaild LogIn")
-        console.log(err)
-      }) 
+  const handleLogin = () => {
+    if (email == '') {
+      Alert.alert(Constants.EMAIL_REQ)
+    } else if (password == '') {
+      Alert.alert(Constants.PASS_REQ)
+    } else {
+      dispatch(setCredentials({ email: email, password: password }));
+      dispatch(loginRequestAuthenticate({
+        email : email,
+        password : password
+      }))
     }
-  // console.log("User++++", user)
+  }
   
     return (
       <SafeAreaView style={styles.container}>

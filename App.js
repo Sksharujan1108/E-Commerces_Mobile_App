@@ -4,13 +4,18 @@ import AuthStack from './src/navigation/stack/AuthStack'
 import { Provider } from 'react-redux';
 import store from './src/feature/store';
 import { ModalPortal } from 'react-native-modals';
+import { UserContext } from './src/Utilis/UserContext';
 
 
 export default function App() {
   return (
     <Provider store = {store}>
-      <AuthStack />
-      <ModalPortal/>
+      
+      <UserContext>
+        <AuthStack />
+        <ModalPortal/>
+      </UserContext>
+      
     </Provider>
   );
 }
