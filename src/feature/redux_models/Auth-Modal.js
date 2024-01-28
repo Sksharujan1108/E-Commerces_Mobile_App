@@ -16,7 +16,8 @@ export default {
   export const authError = {
     message: undefined,
     status: undefined,
-    errors: []
+    errors: [],
+    errorsDescription: []
   };
   
   // Post Register
@@ -38,7 +39,9 @@ export default {
     status: undefined,
     jwttoken: undefined,
     refreshToken: undefined,
-    errorDiscription: undefined,
+    responseDto: {
+      message: undefined,
+    }
   };
   
   export const loginAuthRequestBody = {

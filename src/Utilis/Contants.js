@@ -20,6 +20,14 @@ export const Constants = {
   ENTER_NEW_EMAIL: 'Please Enter New Email Address',
   VALID_EMAIL: 'Please Enter Valid Email Address',
   PASS_REQUEUED: 'Please Enter New Email Address',
+
+  // Address
+  NAME1_REQ: 'Please Enter Name',
+  MOBILE_REQ: 'Please Enter Moble Number',
+  HOUSENO_REQ: 'Please Enter House_NO',
+  STREET_REQ: 'Please Enter Street_No',
+  LANDMARK_REQ: 'Please Enter Land_Mark',
+  POSTALCode_REQ: 'Please Enter Postal_code',
 }
 
 export const STATUS = {

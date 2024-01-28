@@ -40,9 +40,9 @@ const AuthSlice = createSlice({
       })
       .addCase(registerRequestAuthenticate.rejected, (state, action) => {
         if (action?.payload?.state === 401) {
-          Alert.alert(action?.payload?.errors[0]) 
+          Alert.alert(action?.payload?.errorDiscription[0]) 
           } else if (action?.error) {
-            Alert.alert (Constants.INVALID_CREDENTIALS)
+            Alert.alert (action?.error?.message)
           }
         state.authSliceStatus = STATUS.FAILED;
         state.registerAuthenticateDataStatus = STATUS.FAILED;

@@ -9,13 +9,26 @@ import {
 } from "react-native";
 import React, { useEffect, useState,useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwt_decode from "jwt-decode"
-import axios from "axios";
+import jwt_decode from "jwt-decode";
 import { useNavigation } from "@react-navigation/native";
 import { UserType } from '../../../Utilis/UserContext'
+import { Constants } from "../../../Utilis/Contants";
+import { STATUS } from "../../../Utilis/Contants";
+import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
+import { selectAddressData, selectAddressStatus } from "../../../feature/Slices/AddressSlices";
+import { addressRequest } from "../../../feature/thunks/AddressThunk";
 
 const AddressScreen = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+
+  const dispatch = useAppDispatch();
+
+  const addressDataStatus = useAppSelector(selectAddressStatus);
+    console.log('logInAuthenticateData********', addressDataStatus)
+
+    const addressData = useAppSelector(selectAddressData);
+    console.log('logInAuthenticateData********', addressData)
+
   const [name, setName] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const [houseNo, setHouseNo] = useState("");
@@ -23,6 +36,7 @@ const AddressScreen = () => {
   const [landmark, setLandmark] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const {userId,setUserId} = useContext(UserType)
+
   useEffect(() => {
     const fetchUser = async() => {
         const token = await AsyncStorage.getItem("authToken");
@@ -34,37 +48,41 @@ const AddressScreen = () => {
     fetchUser();
   },[]);
   console.log(userId)
+
+  useEffect(() => {
+    if (addressDataStatus === STATUS.SUCCEEDED) {
+      if (addressData.status === 200) {
+        Alert.alert(addressData?.responseDto?.message)
+        navigation.goBack()
+      }
+    }
+  })
+
   const handleAddAddress = () => {
-      const address = {
+    if (name == '') {
+      Alert.alert(Constants.NAME1_REQ) 
+    } else if (mobileNo == '') {
+      Alert.alert(Constants.MOBILE_REQ)
+    } else if (houseNo == '') {
+      Alert.alert(Constants.HOUSENO_REQ)
+    } else if (street == '') {
+      Alert.alert(Constants.STREET_REQ)
+    } else if (landmark == '') {
+      Alert.alert(Constants.LANDMARK_REQ)
+    } else if (landmark == '') {
+      Alert.alert(Constants.POSTALCode_REQ)
+    }
+    const address = {
           name,
           mobileNo,
           houseNo,
           street,
           landmark,
           postalCode
-      }
-
-      axios
-      .post("http://192.168.83.198:8000/addresses", {userId,address})
-      .then((response) => {
-        console.log('response++++handleAddAddress+++handleAddAddress++', response); 
-          Alert.alert("Success","Addresses added successfully");
-          setName("");
-          setMobileNo("");
-          setHouseNo("");
-          setStreet("");
-          setLandmark("");
-          setPostalCode("");
-
-          setTimeout(() => {
-            navigation.goBack();
-          },500)
-
-      }).catch((error) => {
-          Alert.alert("Error","Failed to add address")
-          console.log("error",error)
-      })
+    }
+    dispatch(addressRequest(address, userId))
   }
+
   return (
     <ScrollView style={{ marginTop: 50 }}>
       <View style={{ height: 50, backgroundColor: "#00CED1" }} />

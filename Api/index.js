@@ -92,9 +92,9 @@ const sendVerification = async (email,verificationToken) => {
 
       if(!name || !email || !password) {
         return response.status(401).json({ 
-          status: '401',
+          status: 401,
           message: 'Bad Request',
-          errors: [
+          errorDiscription: [
             'Please Input All Details'
           ],
         })
@@ -104,18 +104,20 @@ const sendVerification = async (email,verificationToken) => {
       const existingUser = await Users.findOne({ email });
       if (existingUser) {
         return response.status(401).json({ 
-          status: '401',
+          status: 401,
           message: 'Bad Request',
-          errors: [
-            'All Ready Exit, Please choose a different email.'
+          errorDiscription: [
+            'Email already registered, Please choose a different email.'
           ], 
         });
       }
   
       // create A New User
       const newUser = new Users({ name, email, password });
+
       // Generate and store the Verification Token
       newUser.verificationToken = crypto.randomBytes(20).toString('hex');
+
       // Save The User To The Database
       await newUser.save();
 
@@ -126,7 +128,7 @@ const sendVerification = async (email,verificationToken) => {
       sendVerification(newUser.email, newUser.verificationToken)
   
       response.status(200).json({ 
-        status: '200',
+        status: 200,
         responseDto: {
           message: 'Registration Successful'
         }
@@ -134,7 +136,7 @@ const sendVerification = async (email,verificationToken) => {
     } catch (err) {
       console.log('Error SignUp User', err);
       response.status(500).json({ 
-        status: '500',
+        status: 500,
         message: 'Internal Server Error', 
         errors: [
           'An error occurred while processing the registration.'
@@ -145,27 +147,45 @@ const sendVerification = async (email,verificationToken) => {
   
   
   // Endpoint Verify Email
-  app.get('verify/:token', async(req, res) => {
+  app.get('/verify/:token', async (req, res) => {
     try {
       const token = req.params.token;
   
-      // Find The User With The Given Verification Token
-      const user = await Users.findOne({verificationToken: token})
+      // Find the user with the given verification token
+      const user = await Users.findOne({ verificationToken: token });
+  
       if (!user) {
-        return res.status(400).json({ message: 'Invalid Token' });
+        return res.status(401).json({
+          status: 401,
+          message: 'Bad Request',
+          errors: [
+            'Invalid Token'
+          ]
+        });
       }
   
-      // Mark Teh User As Verified
+      // Mark the user as verified
       user.verified = true;
       user.verificationToken = undefined;
   
       await user.save();
-      
-      response.status(200).json({ message: 'Email Verified Successfully'})
+  
+      res.status(200).json({
+        status: 200,
+        responseDto: {
+          message: 'Email Verified Successfully'
+        }
+      });
     } catch (err) {
-      response.status(500).json({ message: 'Email Verification Failed'})
+      res.status(500).json({
+        status: 500,
+        message: 'Internal Server Error',
+        errors: [
+          'Email Verification Failed'
+        ]
+      });
     }
-  })
+  });
 
   
   const generateSecretKey = () => {
@@ -191,7 +211,9 @@ app.post('/login', async (request, response) => {
         status: 401,
         jwttoken: null,
         refreshToken: null,
-        errorDiscription: ['Invalid Email'],
+        errors: [
+          'Invalid Email'
+        ],
       });
     }
 
@@ -201,7 +223,9 @@ app.post('/login', async (request, response) => {
         status: 401,
         jwttoken: null,
         refreshToken: null,
-        errorDiscription: ['Invalid Password'],
+        errors: [
+          'Invalid Password'
+        ],
       });
     }
 
@@ -215,15 +239,20 @@ app.post('/login', async (request, response) => {
       status: 200,
       jwttoken,
       refreshToken,
-      errorDiscription: null,
+      responseDto: {
+        message: 'Login successfully 🤓',
+      },
     });
   } catch (err) {
     console.error('Error during login:', err);
     response.status(500).json({
       status: 500,
+      message: 'Internal Server Error',
       jwttoken: null,
       refreshToken: null,
-      errorDiscription: ['Login Failed'],
+      errorDiscription: [
+        'Login Failed'
+      ],
     });
   }
 });
@@ -239,7 +268,13 @@ app.post("/addresses", async (req, res) => {
     //find the user by the Userid
     const user = await Users.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ 
+          status: 404,
+          message: 'Bad Request',
+          errors: [
+            'User not found'
+          ],
+      });
     }
 
     //add the new address to the user's addresses array
@@ -248,10 +283,21 @@ app.post("/addresses", async (req, res) => {
     //save the updated user in te backend
     await user.save();
 
-    res.status(200).json({ message: "Address created Successfully" });
+    res.status(200).json({ 
+      status: 200,
+      responseDto: {
+          message: 'Address created Successfully'
+      },
+    });
     
   } catch (error) {
-    res.status(500).json({ message: "Error addding address" });
+    res.status(500).json({ 
+      status: 500,
+      message: 'Internal Server Error',
+        errorDiscription: [
+            'User not found'
+          ],
+    });
   }
 });
 
@@ -262,13 +308,30 @@ app.get("/addresses/:userId", async (req, res) => {
 
     const user = await Users.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        status: 404,
+        message: 'Not Found',
+        errors: [
+          'User not found'
+        ]
+      });
     }
 
     const addresses = user.addresses;
-    res.status(200).json({ addresses });
+    res.status(200).json({
+      status: 200,
+      responseDto: {
+        addresses
+      }
+    });
 
   } catch (error) {
-    res.status(500).json({ message: "Error retrieveing the addresses" });
+    res.status(500).json({
+      status: 500,
+      message: 'Internal Server Error',
+      errorDiscription: [
+        'Error retrieving the addresses'
+      ]
+    });
   }
 });

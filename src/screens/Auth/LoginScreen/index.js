@@ -22,7 +22,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAppDispatch, useAppSelector } from "../../../feature/stateHooks";
 import { loginRequestAuthenticate } from "../../../feature/thunks/AuthThunk";
 import { selectLogInAuthenticateData, selectLogInAuthenticateStatus } from "../../../feature/Slices/AuthSlices";
-import { STATUS } from "../../../Utilis/Contants";
+import { Constants, STATUS } from "../../../Utilis/Contants";
 import { setCredentials } from "../../../feature/Slices/ConstantsSlices";
   
   const LoginScreen = () => {
@@ -67,9 +67,9 @@ import { setCredentials } from "../../../feature/Slices/ConstantsSlices";
 
   const handleLogin = () => {
     if (email == '') {
-      ErrorFlash(Constants.EMAIL_REQ)
+      Alert.alert(Constants.EMAIL_REQ)
     } else if (password == '') {
-      ErrorFlash(Constants.PASS_REQ)
+      Alert.alert(Constants.PASS_REQ)
     } else {
       dispatch(setCredentials({ email: email, password: password }));
       dispatch(loginRequestAuthenticate({

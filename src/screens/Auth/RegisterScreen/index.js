@@ -31,10 +31,11 @@ const RegisterScreen = () => {
   const authSliceStatus = useAppSelector(selectAuthSliceStatus);
 
   const registerAuthenticateStatus = useAppSelector(selectRegisterAuthenticateStatus);
-    console.log('registerAuthenticateStatus********', registerAuthenticateStatus)
+    console.log('registerAuthenticateStatus********', registerAuthenticateStatus?.payload?.status)
 
     const registerAuthenticateData = useAppSelector(selectRegisterAuthenticateData);
-    console.log('registerAuthenticateData********', registerAuthenticateData)
+    console.log('registerAuthenticateData***status***status**', registerAuthenticateData?.payload?.status)
+    console.log('registerAuthenticateData********', registerAuthenticateData?.responseDto?.message)
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,9 +46,9 @@ const RegisterScreen = () => {
 
   useEffect(() => {
     if (registerAuthenticateStatus === STATUS.SUCCEEDED) {
-      if (registerAuthenticateData.status === 200) {
-        Alert.alert(registerAuthenticateData?.responseDto?.message)
-        navigation.popTOTop()
+      if (registerAuthenticateData?.status === 200) {
+        Alert.alert('Registration Successful')
+        navigation.goBack()
       }
     }
   }, [registerAuthenticateStatus])
